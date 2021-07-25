@@ -45,3 +45,15 @@ variable "dev_public_subnets" {
 
   }
 }
+
+variable "http_port" {
+  default = "80"
+}
+
+variable "backend_protocol" {
+  default = "HTTP"
+}
+
+
+
+
