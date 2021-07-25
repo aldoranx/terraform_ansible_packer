@@ -6,8 +6,12 @@ variable "tenancy" {
   default = "dedicated"
 }
 
-variable "vpc-id" {
-  description = "aws_vpc.main.id"
+variable "ami_id" {
+  default = "ami-00399ec92321828f5 "
+}
+
+variable "dev-webserver-pub-sub-01" {
+  default = "10.0.1.0/24"
 }
 
 variable "all-connexion-allowed" {
@@ -30,7 +34,7 @@ variable "internal" {
   default = "false"
 }
 
-variable "name" {
+variable "alb_name" {
   default = "dev-alb"
 }
 

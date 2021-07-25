@@ -1,6 +1,6 @@
 #aws_vpc
 resource "aws_vpc" "main" {
-  cidr_block       = var.vpc_cidr
+  cidr_block       = var.vpc-cidr
   instance_tenancy = var.tenancy
 
   tags = {
@@ -8,19 +8,48 @@ resource "aws_vpc" "main" {
   }
 }
 
-#aws_subnets
-resource "aws_subnet" "main" {
-  vpc_id     = var.vpc_id
-  cidr_block = var.subnet_cidr
+
+#aws_public_subnets_01
+resource "aws_subnet" "dev-public-subnet-01" {
+  vpc_id                  = var.vpc-id
+  cidr_block              = var.dev-pub-sub-01
+  map_public_ip_on_launch = true
+  availability_zone       = "us-east-2c"
 
   tags = {
-    Name = "webserver-subnet"
+    Name = "dev-public-subnet-01"
   }
 }
 
+#aws_public_subnets_02
+resource "aws_subnet" "dev-public-subnet-02" {
+  vpc_id                  = var.vpc-id
+  cidr_block              = var.dev-pub-sub-02
+  map_public_ip_on_launch = true
+  availability_zone       = "us-east-2a"
+
+  tags = {
+    Name = "dev-public-subnet-02"
+  }
+}
+
+
+#aws_dev_web_server
+resource "aws_subnet" "dev-webserver-subnet" {
+  vpc_id     = var.vpc-id
+  cidr_block = var.dev-webserver-name
+
+
+  tags = {
+    Name = "dev-webserver-subnet"
+  }
+}
+
+
+
 #aws_webserver_sg
 resource "aws_security_group" "dev-webserver-sg" {
-  name        = "dev-webserver-sg"
+  name        = var.dev-webserver-name
   description = "ALB Security Group"
   vpc_id      = aws_vpc.main.id
 
@@ -39,7 +68,7 @@ resource "aws_security_group" "dev-webserver-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-   # HTTPS
+  # HTTPS
   ingress {
     from_port   = 443
     protocol    = "tcp"
@@ -72,7 +101,7 @@ resource "aws_security_group" "dev-alb-sg" {
     description = "Allow HTTP trafic"
   }
 
-  egress {
+  ingress {
     from_port   = 443
     protocol    = "tcp"
     to_port     = 443
@@ -91,4 +120,29 @@ resource "aws_security_group" "dev-alb-sg" {
   tags = {
     Name = "dev_alb_sg"
   }
+}
+
+#alb
+
+resource "aws_lb" "dev-alb" {
+  name               = "test-lb-tf"
+  internal           = var.internal
+  load_balancer_type = "application"
+  security_groups    = ["${aws_security_group.dev-alb-sg.id}"]
+  subnets         = [aws_subnet.dev-public-subnet-01.id, aws_subnet.dev-public-subnet-02.id]
+
+  tags = {
+    Environment = "dev-alb"
+  }
+}
+
+#Internet Gateway
+
+resource "aws_internet_gateway" "dev-igw" {
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "dev_igw"
+  }
+
 }

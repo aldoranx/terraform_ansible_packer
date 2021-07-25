@@ -1,19 +1,19 @@
 provider "aws" {
-  region = "eu-west-3"
+  region = "us-east-2"
 }
 
 module "my_vpc" {
-  source      = "../modules/vpc"
-  vpc_cidr    = "10.0.0.0/16"
-  tenancy     = "default"
-  vpc_id      = module.my_vpc.vpc_id
-  subnet_cidr = "10.0.1.0/24"
+  source         = "../modules/vpc"
+  vpc-cidr       = "10.0.0.0/16"
+  tenancy        = "default"
+  vpc-id         = module.my_vpc.vpc_id
+  dev-pub-sub-01 = "10.0.1.0/24"
 }
 
 module "my_ec2" {
   source        = "../modules/ec2"
   ec2_count     = 1
-  ami_id        = "ami-0f7cd40eac2214b37"
+  ami_id        = var.ami_id
   instance_type = "t2.micro"
   subnet_id     = module.my_vpc.subnet_id
 }
@@ -37,3 +37,13 @@ module "dynamodb_table" {
   }
 }
 
+/*
+module "my_alb" {
+  source  = "../modules/vpc/"
+  name    = var.alb_name
+  alb     = var.alb
+  vpc-id  = module.my_vpc.vpc_id
+  dev_public_subnets = var.dev_public_subnets
+
+}
+*/
