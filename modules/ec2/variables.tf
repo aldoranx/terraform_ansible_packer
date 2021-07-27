@@ -7,3 +7,7 @@ variable "instance_type" {
 }
 
 variable "subnet_id" {}
+
+variable "webserver_id" {
+  default = "dev-webserver"
+}

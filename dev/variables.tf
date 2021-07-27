@@ -2,16 +2,12 @@ variable "vpc-cidr" {
   default = "10.0.0.0/16"
 }
 
-variable "tenancy" {
-  default = "dedicated"
+variable "aws-region" {
+  default = "us-east-2"
 }
 
-variable "ami_id" {
+variable "ami-id" {
   default = "ami-00399ec92321828f5 "
-}
-
-variable "dev-webserver-pub-sub-01" {
-  default = "10.0.1.0/24"
 }
 
 variable "all-connexion-allowed" {
@@ -32,6 +28,10 @@ variable "dev-webserver-name" {
 
 variable "internal" {
   default = "false"
+}
+
+variable "intance-type" {
+  default = "t2.micro"
 }
 
 variable "alb_name" {
