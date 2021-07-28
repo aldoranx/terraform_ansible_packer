@@ -16,22 +16,9 @@ module "my_ec2" {
   subnet_id     = module.my_vpc.subnet_id
 }
 
-module "dynamodb_table" {
-  source = "terraform-aws-modules/dynamodb-table/aws"
+module "dynamodb" {
+  source = "../modules/db"
 
-  name     = "my-table"
-  hash_key = "id"
 
-  attributes = [
-    {
-      name = "id"
-      type = "N"
-    }
-  ]
 
-  tags = {
-    Terraform   = "true"
-    Environment = "dev"
-  }
 }
-
