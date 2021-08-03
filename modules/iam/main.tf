@@ -1,6 +1,6 @@
 resource "aws_iam_role_policy" "lambda_policy" {
   name = "lambda_policy"
-  role = aws_iam_role.lambda_role.id
+  role = aws_iam_role.iam_for_lambda.id
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
@@ -17,6 +17,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
   })
 }
 
+/*
 resource "aws_iam_role" "lambda_role" {
   name = "lambda_role"
 
@@ -33,5 +34,26 @@ resource "aws_iam_role" "lambda_role" {
       },
     ]
   })
+}
+*/
+
+resource "aws_iam_role" "iam_for_lambda" {
+  name = "iam_for_lambda"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
 }
 
