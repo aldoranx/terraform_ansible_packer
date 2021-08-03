@@ -18,7 +18,8 @@ module "my_ec2" {
 
 module "dynamodb" {
   source = "../modules/db"
+}
 
-
-
+module "iam" {
+  source = "../modules/iam"
 }
